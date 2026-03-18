@@ -1,0 +1,71 @@
+[package]
+name = "crabtop"
+version = "1.0.0"
+edition = "2021"
+authors = ["crabtop contributors"]
+description = "A memory-safe Rust rewrite of btop — resource monitor with hardened privilege model and decoupled render/collect loop"
+license = "Apache-2.0"
+repository = "https://github.com/your-org/crabtop"
+keywords = ["monitor", "system", "tui", "resources", "linux"]
+categories = ["command-line-utilities"]
+rust-version = "1.75"
+
+[[bin]]
+name = "crabtop"
+path = "src/main.rs"
+
+[dependencies]
+# TUI rendering
+ratatui = "0.26"
+crossterm = { version = "0.27", features = ["event-stream"] }
+
+# System info collection (memory-safe, no unsafe C bindings)
+sysinfo = "0.30"
+
+# Privilege dropping / capabilities (Linux)
+caps = { version = "0.5", optional = true }
+
+# Async runtime — macros needed for #[tokio::main] and tokio::select!
+# rt (not rt-multi-thread) — current_thread flavor needs only 1 OS thread
+tokio = { version = "1", features = ["rt", "time", "signal", "sync", "macros"] }
+
+# Async stream for crossterm EventStream
+tokio-stream = "0.1"
+
+# Configuration
+serde = { version = "1", features = ["derive"] }
+toml = "0.8"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# CLI args
+clap = { version = "4", features = ["derive"] }
+
+# Color / theme
+palette = "0.7"
+
+# Error handling
+anyhow = "1"
+thiserror = "1"
+
+# Signal handling and syscalls
+nix = { version = "0.27", features = ["signal"] }
+libc = "0.2"
+
+[features]
+default = ["capabilities"]
+capabilities = ["caps"]
+
+[profile.release]
+# Security-oriented release profile
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"          # no unwinding — reduces attack surface
+strip = false            # keep symbols for audit trail
+overflow-checks = true   # catch integer overflows in release
+
+[profile.release.build-override]
+opt-level = 0
