@@ -41,7 +41,7 @@ A memory-safe Rust rewrite of [btop++](https://github.com/aristocratos/btop), th
 | Integer overflow possible in release | `overflow-checks = true` in release profile |
 | Render rate tied to collection rate | v2: fixed 10fps render loop independent of `--interval` |
 
-## v2 Architecture
+## Architecture
 
 ```
 ┌─────────────────────────────────────┐
@@ -167,18 +167,6 @@ cpu_single_graph = false
 net_auto = true
 vim_keys = false
 ```
-
----
-
-## Security
-
-See [SECURITY.md](./SECURITY.md) for:
-- Vulnerability reporting process
-- Coordinated disclosure policy
-- Detailed security design rationale
-- Release verification instructions
-
----
 
 ## License
 
