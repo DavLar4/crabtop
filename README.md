@@ -28,19 +28,6 @@ A memory-safe Rust rewrite of [btop++](https://github.com/aristocratos/btop), th
 └────────────────────────────────────────────────────┴──────────────────────┘
 ```
 
-## Why crabtop?
-
-| Issue in btop C++ | crabtop solution |
-|---|---|
-| C++ memory unsafety (buffer overflows, UAF) | Rust borrow checker: entire class eliminated |
-| `make setuid` grants full root to binary | SUID **not supported** — binary refuses to run with SUID bit |
-| No release signing | Every binary signed with sigstore/cosign (keyless, OIDC) |
-| No SECURITY.md | Full responsible disclosure policy in [SECURITY.md](./SECURITY.md) |
-| No formal vulnerability process | GitHub Security Advisories + 90-day coordinated disclosure |
-| No `cargo audit` in CI | Security audit runs on every push and PR |
-| Integer overflow possible in release | `overflow-checks = true` in release profile |
-| Render rate tied to collection rate | v2: fixed 10fps render loop independent of `--interval` |
-
 ## Architecture
 
 ```
